@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Image Comparison</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+  }
+  .container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px;
+  }
+  .image {
+    max-width: 90%;
+    margin-left: 5%;
+    height: auto;
+    cursor: pointer;
+  }
+  .image-name {
+    margin-left: 10px;
+  }
+  h1{
+    position: fixed;
+    font-size: 50dp;
+    width: 100%;
+    text-align-last: center;
+   }
+   .t1{
+    color:rgb(135, 179, 218);
+    font-style: italic;
+    width: 100%;
+    text-align: center;
+   }
+   .t2{
+    color: rgb(43, 49, 226);
+    font-style: oblique;
+   }
+   .t3{
+    color: red;
+   }
+   .t5{
+    width: 100%;
+    text-align: center;
+    margin-top: 10%;
+}
+@media screen and (min-height: 3000px;){
+    h1 {font-size :  70dp}
+}
+   
+</style>
+</head><!--hello there ;)-->
+<body>
+  <h1>Rate the picture</h1>
+  <div class="t1">
+  <a>NITRR Edition</a></div>
+  <div class="t5">choose the better one </div>
+<br><br><br>
+<div class="container">
+  <div>
+    <img id="image1" alt="Image 1" class="image" onclick="changeImages(1)">
+    <p id="name1" class="image-name"></p>
+  </div>
+  <div>
+    <img id="image2" alt="Image 2" class="image" onclick="changeImages(2)">
+    <p id="name2" class="image-name"></p>
+  </div>
+</div>
+<div class="t2">The pictures of the above shown people are from NIT RAIPUR </div></br>
+<div class="t3">Disclaimer: All the pictures shown are obtained from public databases and posted to the internet on their own therefore this site does not violate right to privacy.</div></br>
+<div class="t4">If you want your picture removed,have any suggestions or querey...
+  Email- hegor65308@jontra.com</div>
+<script>
+     var imagePaths = [];
+  var imageNames = [];
+  var currentIndex = 0;
+
+  
+  fetch('img_names.txt')
+    .then(response => response.text())
+    .then(data => {
+      imagePaths = data.split('\n');
+      return fetch('person_names.txt');
+    })
+    .then(response => response.text())
+    .then(data => {
+      imageNames = data.split('\n');
+      changeImages();
+    })
+    .catch(error => console.error('Error fetching data:', error));
+
+  function getImageNumber(imagePath) {
+    var match = imagePath.match(/image_(\d+)/);
+    if (match) {
+      return parseInt(match[1]);
+    }
+    return -1;
+  }
+
+  function changeImages() {
+    currentIndex = (currentIndex + 1) % imagePaths.length;
+    var imageNumber1 = getImageNumber(imagePaths[currentIndex]);
+    document.getElementById("image1").src = "images/" + imagePaths[currentIndex];
+    document.getElementById("name1").textContent = imageNames[imageNumber1 - 1];
+    
+    currentIndex = (currentIndex + 1) % imagePaths.length;
+    var imageNumber2 = getImageNumber(imagePaths[currentIndex]);
+    document.getElementById("image2").src = "images/" + imagePaths[currentIndex];
+    document.getElementById("name2").textContent = imageNames[imageNumber2 - 1];
+  }
+</script>
+</body>
+</html>
